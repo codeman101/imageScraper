@@ -18,10 +18,29 @@ while again:
     while text.find('href', ptr) != -1:
         ptr = text.find('href', ptr)
         ptr+=6
-        if text.find('.jpg', ptr) < text.find('"', ptr) and text.find('.jpg', ptr) != -1:
-            ptrjpg = text.find('"', ptr)
+        ptrjpg=0
+        if (text.find('.jpg', ptr) < text.find("'", ptr) or text.find('.jpg', ptr) < text.find("'", ptr)):
+            ptr1 = text.find('.jpg', ptr)
+            ptr2 = text.find('"', ptr)
+            ptr3 = text.find("'", ptr)
+            if (ptr2-ptr1) <= 5 and (ptr1-ptr2) <=5:
+                ptrjpg = text.find('"', ptr)
+            elif (ptr3-ptr1) <= 5 and (ptr1-ptr3) <= 5:
+                ptrjpg = text.find("'", ptr)
+            else:
+                ptr-=1
+                if text[ptr] == '"':
+                    ptr+=1
+                    ptr = text.find('"', ptr)
+                    continue
+                elif text[ptr] == "'":
+                    ptr += 1
+                    ptr = text.find("'", ptr)
+                    continue
+                else: # end of the page was hit
+                    break
         else:
-            ptr = text.find('"', ptr)
+            ptr += 10
             continue
         link = text[ptr:ptrjpg]
         urlretrieve(link, jnum + '.jpg')
