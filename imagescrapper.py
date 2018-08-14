@@ -53,11 +53,15 @@ while again:
     dest = cwd +  '/' + dir
     print(dest)
     files = os.listdir(cwd)
-
     for f in files: # for loop to move all pics to the dir
         if (f.endswith('.jpg')):
             shutil.move(f, dest)
-    print('done!\n')
+    if len(os.listdir(dest)) == 0:
+         print('I did not download anything because the images are of a different '
+               'file type than I was programmed for try changing jpg to jpeg in my code')
+         os.rmdir(dest)
+    else:
+        print('done!\n')
     answer  = input('Do you want to get another collection of pictures?[y/n]\n')
     if answer == 'y':
         print('ok program will restart')
