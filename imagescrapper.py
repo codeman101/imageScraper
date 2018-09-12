@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from urllib.request import urlretrieve# for get them pics
+from urllib.request import urlretrieve# for getting pictures
 from urllib.request import urlopen
 import os # for dir work
 import shutil # to move pics to certain folder
