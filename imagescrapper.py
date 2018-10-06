@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
-from urllib.request import urlretrieve# for getting pictures
+# this script downloads the html page of a given link and parses through it looking for href attributes and grabbing the link that follows as
+# a substring and then uses urlretrieve module to download the image from the link
+
+
+from urllib.request import urlretrieve# for getting images
 from urllib.request import urlopen
 import os # for dir work
 import shutil # to move pics to certain folder
@@ -19,15 +23,15 @@ while again:
         ptr = text.find('href', ptr)
         ptr+=6
         ptrjpg=0
-        if (text.find('.jpg', ptr) < text.find("'", ptr) or text.find('.jpg', ptr) < text.find("'", ptr)):
+        if (text.find('.jpg', ptr) < text.find("'", ptr) or text.find('.jpg', ptr) < text.find("'", ptr)): # the lines in this parse the href 
             ptr1 = text.find('.jpg', ptr)
             ptr2 = text.find('"', ptr)
             ptr3 = text.find("'", ptr)
-            if (ptr2-ptr1) <= 5 and (ptr1-ptr2) <=5:
+            if (ptr2-ptr1) <= 5 and (ptr1-ptr2) <=5: # checking to make sure the href is followed by an actual link
                 ptrjpg = text.find('"', ptr)
             elif (ptr3-ptr1) <= 5 and (ptr1-ptr3) <= 5:
                 ptrjpg = text.find("'", ptr)
-            else:
+            else: # string found after href wasn't an actual image link proceed to next href
                 ptr-=1
                 if text[ptr] == '"':
                     ptr+=1
@@ -39,7 +43,7 @@ while again:
                     continue
                 else: # end of the page was hit
                     break
-        else:
+        else: # string found after href wasn't an image proceed to next href
             ptr += 10
             continue
         link = text[ptr:ptrjpg]
