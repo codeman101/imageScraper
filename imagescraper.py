@@ -18,39 +18,23 @@ while again:
     bytes = obj.read()
     text = bytes.decode('utf8')
     ptr = 0
-    jnum = '1' #jpg count number
+    jnum = 1 #jpg count number
     while text.find('href', ptr) != -1:
         ptr = text.find('href', ptr)
+        if text[ptr+5] == "'":
+            quote_type = "'"
+        else: quote_type = '"'
         ptr+=6
-        ptrjpg=0
-        if (text.find('.jpg', ptr) < text.find("'", ptr) or text.find('.jpg', ptr) < text.find("'", ptr)): # the lines in this parse the href 
-            ptr1 = text.find('.jpg', ptr)
-            ptr2 = text.find('"', ptr)
-            ptr3 = text.find("'", ptr)
-            if (ptr2-ptr1) <= 5 and (ptr1-ptr2) <=5: # checking to make sure the href is followed by an actual link
-                ptrjpg = text.find('"', ptr)
-            elif (ptr3-ptr1) <= 5 and (ptr1-ptr3) <= 5:
-                ptrjpg = text.find("'", ptr)
-            else: # string found after href wasn't an actual image link proceed to next href
-                ptr-=1
-                if text[ptr] == '"':
-                    ptr+=1
-                    ptr = text.find('"', ptr)
-                    continue
-                elif text[ptr] == "'":
-                    ptr += 1
-                    ptr = text.find("'", ptr)
-                    continue
-                else: # end of the page was hit
-                    break
-        else: # string found after href wasn't an image proceed to next href
-            ptr += 10
+        link = text[ptr:text.find(quote_type, ptr)]
+        try:
+            if "jpg" in link or "jpeg" in link:
+                urlretrieve(link, str(jnum) + '.jpg')
+            else:
+                continue
+        except:
+            print("link failed to dl and link was "+link)
             continue
-        link = text[ptr:ptrjpg]
-        urlretrieve(link, jnum + '.jpg')
-        jnum = int(jnum)
         jnum += 1
-        jnum = str(jnum)
     cwd = os.getcwd()
 
     os.mkdir(dir)
@@ -65,6 +49,9 @@ while again:
                'file type than I was programmed for try changing jpg to jpeg in my code')
          os.rmdir(dest)
     else:
+        picspath = "~/Pictures"
+        picspath = os.path.expanduser(picspath)
+        shutil.move(dir, picspath)
         print('done!\n')
     answer  = input('Do you want to get another collection of pictures?[y/n]\n')
     if answer == 'y':
